@@ -9,6 +9,7 @@ Ejemplo de ejecución:
 	CALL dbMain.uspCreateClient("Jorge Luis Anaya", "NATURAL", "1221233", "Jorge Anaya", "j-anaya-@hotmail.com", "321411241", "321411241", "Diagonal 32D #32 sur 39", 2, 1)
 ----------------------------------------------------------------------------------------
 SELECT * FROM dbMain.tblClients;
+SELECT * FROM dbmain.tblClients WHERE clientID = 1
 */
 DELIMITER &&
 DROP PROCEDURE IF EXISTS dbMain.uspCreateClient;

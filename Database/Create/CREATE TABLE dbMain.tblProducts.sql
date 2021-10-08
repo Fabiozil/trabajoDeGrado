@@ -6,17 +6,18 @@ Fecha:
 Descripción:
 	Creación de tabla de productos
 ----------------------------------------------------------------------------------------
+DROP TABLE dbMain.tblProducts;
 */
 CREATE TABLE 
 	dbMain.tblProducts
     (
     productID INT UNSIGNED AUTO_INCREMENT UNIQUE,
-    userID INT UNSIGNED UNIQUE,
+    userID INT UNSIGNED,
     name VARCHAR(150) NOT NULL,
     code VARCHAR(50),
-	stockValue FLOAT UNSIGNED,
+	stockValue FLOAT,
     stock INT  UNSIGNED NOT NULL,
-    value FLOAT UNSIGNED,
+    value FLOAT,
     description VARCHAR(200),
     updatedAt DATETIME,
     createdAt DATETIME NOT NULL

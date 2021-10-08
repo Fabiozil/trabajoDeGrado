@@ -3,6 +3,7 @@
     "serverless-offline": "^8.2.0"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.0"
   }
