@@ -1,0 +1,233 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: backend
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: "2"
+
+provider:
+    name: aws
+    runtime: python3.8
+    lambdaHashingVersion: 20201221
+
+plugins:
+    - serverless-offline
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+#package:
+#  patterns:
+#    - '!exclude-me.py'
+#    - '!exclude-me-dir/**'
+#    - include-me.py
+#    - include-me-dir/**
+
+functions:
+    hello:
+        handler: handler.hello
+        events:
+            - http:
+                  path: helloWorld
+                  method: GET
+                  cors: true
+    getClient:
+        handler: lambdas/GET/getClient.lambda_handler
+        events:
+            - http:
+                  path: getClient
+                  method: GET
+                  cors: true
+    getProducts:
+        handler: lambdas/GET/getProducts.lambda_handler
+        events:
+            - http:
+                  path: getProducts
+                  method: GET
+                  cors: true
+    getProduct:
+        handler: lambdas/GET/getProduct.lambda_handler
+        events:
+            - http:
+                  path: getProduct
+                  method: GET
+                  cors: true
+    getClients:
+        handler: lambdas/GET/getClients.lambda_handler
+        events:
+            - http:
+                  path: getClients
+                  method: GET
+                  cors: true
+    getProviders:
+        handler: lambdas/GET/getProviders.lambda_handler
+        events:
+            - http:
+                  path: getProviders
+                  method: GET
+                  cors: true
+    getBills:
+        handler: lambdas/GET/getBills.lambda_handler
+        events:
+            - http:
+                  path: getBills
+                  method: GET
+                  cors: true
+    getProvider:
+        handler: lambdas/GET/getProvider.lambda_handler
+        events:
+            - http:
+                  path: getProvider
+                  method: GET
+                  cors: true
+    createClient:
+        handler: lambdas/POST/createClient.lambda_handler
+        events:
+            - http:
+                  path: createClient
+                  method: POST
+                  cors: true
+    createProduct:
+        handler: lambdas/POST/createProduct.lambda_handler
+        events:
+            - http:
+                  path: createProduct
+                  method: POST
+                  cors: true
+    createProvider:
+        handler: lambdas/POST/createProvider.lambda_handler
+        events:
+            - http:
+                  path: createProvider
+                  method: POST
+                  cors: true
+    deleteClient:
+        handler: lambdas/DELETE/deleteClient.lambda_handler
+        events:
+            - http:
+                  path: deleteClient
+                  method: DELETE
+                  cors: true
+    deleteProduct:
+        handler: lambdas/DELETE/deleteProduct.lambda_handler
+        events:
+            - http:
+                  path: deleteProduct
+                  method: DELETE
+                  cors: true
+    deleteProvider:
+        handler: lambdas/DELETE/deleteProvider.lambda_handler
+        events:
+            - http:
+                  path: deleteProvider
+                  method: DELETE
+                  cors: true
+    updateClient:
+        handler: lambdas/PATCH/updateClient.lambda_handler
+        events:
+            - http:
+                  path: updateClient
+                  method: PATCH
+                  cors: true
+    updateProduct:
+        handler: lambdas/PATCH/updateProduct.lambda_handler
+        events:
+            - http:
+                  path: updateProduct
+                  method: PATCH
+                  cors: true
+    updateProvider:
+        handler: lambdas/PATCH/updateProvider.lambda_handler
+        events:
+            - http:
+                  path: updateProvider
+                  method: PATCH
+                  cors: true
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - httpApi:
+#          path: /users/create
+#          method: get
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+#      - alb:
+#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
+#          priority: 1
+#          conditions:
+#            host: example.com
+#            path: /hello
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
