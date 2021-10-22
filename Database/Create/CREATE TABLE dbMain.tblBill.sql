@@ -24,6 +24,7 @@ CREATE TABLE
     userID INT UNSIGNED NOT NULL,
     clientID INT UNSIGNED NOT NULL,
     validationDate DATETIME,
-    generationDate DATETIME NOT NULL
+    generationDate DATETIME NOT NULL,
+    route VARCHAR(200)
     );
     

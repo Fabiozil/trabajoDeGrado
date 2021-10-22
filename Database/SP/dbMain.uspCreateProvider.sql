@@ -4,46 +4,43 @@ Autor:
 Fecha:
 	9/18/2021
 Descripción:
-	Procedimiento que crea un nuevo producto
+	Procedimiento que crea un nuevo proveedor
 Ejemplo de ejecución:
-	CALL dbMain.uspCreateProvider("Papa", "1", 3, 5, "Papa Capira", 1)
+	CALL dbMain.uspCreateProvider("Proveedor SAS", "11423412123", "3310412", "proveedor@gmail.com", "Diagonal 32D@e3213", 1)
 ----------------------------------------------------------------------------------------
-SELECT * FROM dbMain.tblProducts;
+SELECT * FROM dbMain.tblProviders;
 */
-DELIMITER &&
 DROP PROCEDURE IF EXISTS dbMain.uspCreateProvider;
+DELIMITER &&
 CREATE PROCEDURE dbMain.uspCreateProvider(
 IN name VARCHAR(150),
-IN code VARCHAR(50), 
-IN stock INT UNSIGNED,
-IN value FLOAT,
-IN description VARCHAR(200),
+IN document VARCHAR(20), 
+IN phone VARCHAR(20),
+IN email VARCHAR(200),
+IN address VARCHAR(200),
 IN userAddID INT
 )
 BEGIN
-	SET @stockValue = stock * value;
     START TRANSACTION;
 		INSERT INTO 
-			dbMain.tblProducts
+			dbMain.tblProviders
 			(
 			userID,
 			name,
-			code,
-			stockValue,
-			stock,
-			value,
-			description,
+			document,
+			phone,
+			email,
+			address,
 			createdAt
 			)
 			VALUES
 			(
             userAddID,
 			name,
-			code,
-			@stockValue,
-			stock,
-			value,
-            description,
+			document,
+			phone,
+			email,
+			address,
 			NOW()
 			);
 	COMMIT;

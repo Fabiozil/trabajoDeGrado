@@ -15,18 +15,23 @@ def lambda_handler(event, context):
     cursorObject = db.cursor()
     
     # creating database
-    cursorObject.execute("SELECT clientID, name, clientType, document, contactName, contactEmail, phone, contactPhone, address, fiscalResponsability FROM dbMain.tblClients WHERE clientID = "+ id)
-    row_headers = [x[0] for x in cursorObject.description]
-    result = cursorObject.fetchall()
-    jsonData = []
-    for row in result:
-        jsonData.append(dict(zip(row_headers, row)))
-    print(result[0])
-    print(jsonData)
-    db.close()
-
-    response = {
+    try:
+        cursorObject.execute("SELECT clientID, name, clientType, document, contactName, contactEmail, phone, contactPhone, address, fiscalResponsability FROM dbMain.tblClients WHERE clientID = "+ id)
+        row_headers = [x[0] for x in cursorObject.description]
+        result = cursorObject.fetchall()
+        jsonData = []
+        for row in result:
+            jsonData.append(dict(zip(row_headers, row)))
+        print(result[0])
+        print(jsonData)
+        response = {
         'status' : 200,
         'body' : json.dumps(jsonData)
     }
+    except:
+        response = {
+        'status' : 400
+        }
+    db.close()
+    print(response)
     return response

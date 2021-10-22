@@ -6,12 +6,13 @@ Fecha:
 Descripción:
 	Creación de tabla de proveedores
 ----------------------------------------------------------------------------------------
+DROP TABLE dbMain.tblProviders
 */
 CREATE TABLE 
-	dbMain.tblProvider
+	dbMain.tblProviders
     (
     providerID INT UNSIGNED AUTO_INCREMENT UNIQUE,
-    userID INT UNSIGNED UNIQUE,
+    userID INT UNSIGNED,
     name VARCHAR(150) NOT NULL,
     document VARCHAR(20),
 	phone VARCHAR(20),

@@ -75,6 +75,111 @@ functions:
                   path: getClient
                   method: GET
                   cors: true
+    getProducts:
+        handler: lambdas/GET/getProducts.lambda_handler
+        events:
+            - http:
+                  path: getProducts
+                  method: GET
+                  cors: true
+    getProduct:
+        handler: lambdas/GET/getProduct.lambda_handler
+        events:
+            - http:
+                  path: getProduct
+                  method: GET
+                  cors: true
+    getClients:
+        handler: lambdas/GET/getClients.lambda_handler
+        events:
+            - http:
+                  path: getClients
+                  method: GET
+                  cors: true
+    getProviders:
+        handler: lambdas/GET/getProviders.lambda_handler
+        events:
+            - http:
+                  path: getProviders
+                  method: GET
+                  cors: true
+    getBills:
+        handler: lambdas/GET/getBills.lambda_handler
+        events:
+            - http:
+                  path: getBills
+                  method: GET
+                  cors: true
+    getProvider:
+        handler: lambdas/GET/getProvider.lambda_handler
+        events:
+            - http:
+                  path: getProvider
+                  method: GET
+                  cors: true
+    createClient:
+        handler: lambdas/POST/createClient.lambda_handler
+        events:
+            - http:
+                  path: createClient
+                  method: POST
+                  cors: true
+    createProduct:
+        handler: lambdas/POST/createProduct.lambda_handler
+        events:
+            - http:
+                  path: createProduct
+                  method: POST
+                  cors: true
+    createProvider:
+        handler: lambdas/POST/createProvider.lambda_handler
+        events:
+            - http:
+                  path: createProvider
+                  method: POST
+                  cors: true
+    deleteClient:
+        handler: lambdas/DELETE/deleteClient.lambda_handler
+        events:
+            - http:
+                  path: deleteClient
+                  method: DELETE
+                  cors: true
+    deleteProduct:
+        handler: lambdas/DELETE/deleteProduct.lambda_handler
+        events:
+            - http:
+                  path: deleteProduct
+                  method: DELETE
+                  cors: true
+    deleteProvider:
+        handler: lambdas/DELETE/deleteProvider.lambda_handler
+        events:
+            - http:
+                  path: deleteProvider
+                  method: DELETE
+                  cors: true
+    updateClient:
+        handler: lambdas/PATCH/updateClient.lambda_handler
+        events:
+            - http:
+                  path: updateClient
+                  method: PATCH
+                  cors: true
+    updateProduct:
+        handler: lambdas/PATCH/updateProduct.lambda_handler
+        events:
+            - http:
+                  path: updateProduct
+                  method: PATCH
+                  cors: true
+    updateProvider:
+        handler: lambdas/PATCH/updateProvider.lambda_handler
+        events:
+            - http:
+                  path: updateProvider
+                  method: PATCH
+                  cors: true
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
