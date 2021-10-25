@@ -9,9 +9,10 @@ Ejemplo de ejecución:
 	CALL dbMain.uspCreateUser(1, "1152716365", "Rionegro", "Calle 67 #54 365", "fabioanayac@outlook.com", "3015267553", 2, 1, "NATURAL", "Fabio Enrique Anaya")
 ----------------------------------------------------------------------------------------
 SELECT * FROM dbMain.tblUsers;
+SELECT * FROM dbMain.tblbillenum
 */
-DELIMITER &&
 DROP PROCEDURE IF EXISTS dbMain.uspCreateUser;
+DELIMITER &&
 CREATE PROCEDURE dbMain.uspCreateUser(
 IN numerationID INT UNSIGNED,
 IN document VARCHAR(20),

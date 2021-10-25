@@ -27,6 +27,8 @@ function NewBill() {
         url: "http://localhost:3000/dev/getClients?userID=1",
         headers: {},
     };
+
+    console.log(productsOnBill);
     React.useEffect(
         () =>
             axios(config)
@@ -120,7 +122,7 @@ function NewBill() {
                             <option value="0">Seleccione el producto</option>
                             {productRegisters.map((product) => (
                                 <option value={product.productID}>
-                                    ID: {product.productID} | {product.name} |
+                                    Codigo: {product.code} | {product.name} |
                                     Stock: {product.stock} | ${product.value}
                                 </option>
                             ))}
@@ -225,6 +227,7 @@ function NewBill() {
                 <thead>
                     <tr>
                         <th scope="col">ID Producto</th>
+                        <th scope="col">Codigo</th>
                         <th scope="col">Producto</th>
                         <th scope="col">Precio Unidad</th>
                         <th scope="col">Cantidad</th>
@@ -247,11 +250,13 @@ function NewBill() {
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                         </tr>
                     ) : (
                         productsOnBill.map((product) => (
                             <tr>
-                                <td>{product.productID}</td>
+                                <td>{product.id}</td>
+                                <td>{product.code}</td>
                                 <td>{product.name}</td>
                                 <td>{product.value}</td>
                                 <td>{product.quantity}</td>
@@ -265,6 +270,7 @@ function NewBill() {
                     )}
                     <tr>
                         <th scope="col">Total</th>
+                        <th scope="col"></th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                         <th scope="col"></th>
@@ -309,12 +315,9 @@ function NewBill() {
                     );
                     return;
                 } else {
-                    console.log(discount);
-                    console.log(iva);
-                    console.log(consumption);
-                    console.log(quantity);
                     var nuevoProducto = {
-                        productID: productID,
+                        id: response.data[0]["productID"],
+                        code: response.data[0]["code"],
                         name: response.data[0]["name"],
                         value: response.data[0]["value"],
                         quantity: quantity,
@@ -338,11 +341,11 @@ function NewBill() {
                                 response.data[0]["value"] *
                                 (discount / 100),
                     };
-                    var array = productsOnBill;
-                    array.push(nuevoProducto);
-                    setProductsOnBill(array);
+                    setProductsOnBill((prevValue) => [
+                        ...prevValue,
+                        nuevoProducto,
+                    ]);
                     calculateNewTotal();
-                    console.log(productsOnBill);
                 }
             })
             .catch(function (error) {
@@ -353,7 +356,7 @@ function NewBill() {
     function countOnBill(IDToSearch) {
         var count = 0;
         productsOnBill.forEach((product) => {
-            if ((product.productID = IDToSearch)) {
+            if (product.id === IDToSearch) {
                 count += parseInt(product.quantity);
             }
         });

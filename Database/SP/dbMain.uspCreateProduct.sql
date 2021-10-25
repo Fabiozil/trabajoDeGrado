@@ -10,8 +10,8 @@ Ejemplo de ejecución:
 ----------------------------------------------------------------------------------------
 SELECT * FROM dbMain.tblProducts;
 */
-DELIMITER &&
 DROP PROCEDURE IF EXISTS dbMain.uspCreateProduct;
+DELIMITER &&
 CREATE PROCEDURE dbMain.uspCreateProduct(
 IN name VARCHAR(150),
 IN code VARCHAR(50), 

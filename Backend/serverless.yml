@@ -89,11 +89,32 @@ functions:
                   path: getProduct
                   method: GET
                   cors: true
+    getUser:
+        handler: lambdas/GET/getUser.lambda_handler
+        events:
+            - http:
+                  path: getUser
+                  method: GET
+                  cors: true
     getClients:
         handler: lambdas/GET/getClients.lambda_handler
         events:
             - http:
                   path: getClients
+                  method: GET
+                  cors: true
+    getNumerations:
+        handler: lambdas/GET/getNumerations.lambda_handler
+        events:
+            - http:
+                  path: getNumerations
+                  method: GET
+                  cors: true
+    getNumeration:
+        handler: lambdas/GET/getNumeration.lambda_handler
+        events:
+            - http:
+                  path: getNumeration
                   method: GET
                   cors: true
     getProviders:
@@ -136,6 +157,13 @@ functions:
         events:
             - http:
                   path: createProvider
+                  method: POST
+                  cors: true
+    createNumeration:
+        handler: lambdas/POST/createNumeration.lambda_handler
+        events:
+            - http:
+                  path: createNumeration
                   method: POST
                   cors: true
     deleteClient:

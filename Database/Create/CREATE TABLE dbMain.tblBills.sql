@@ -8,7 +8,7 @@ Descripción:
 ----------------------------------------------------------------------------------------
 */
 CREATE TABLE 
-	dbMain.tblBill
+	dbMain.tblBills
     (
     billID INT UNSIGNED AUTO_INCREMENT UNIQUE,
     consecutive INT UNSIGNED NOT NULL,

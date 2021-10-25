@@ -10,13 +10,13 @@ def lambda_handler(event, context):
             auth_plugin='mysql_native_password'
     )
     print(event["queryStringParameters"])
-    id = event["queryStringParameters"]["clientID"]
+    id = event["queryStringParameters"]["userID"]
     # preparing a cursor object
     cursorObject = db.cursor()
     
     # creating database
     try:
-        cursorObject.execute("SELECT clientID, name, clientType, document, contactName, contactEmail, phone, contactPhone, address, fiscalResponsability FROM dbMain.tblClients WHERE clientID = "+ id)
+        cursorObject.execute("SELECT document, city, address, contactEmail, phone, economicActivityCode, fiscalResponsability, userType, name FROM dbMain.tblUsers WHERE userID = "+ id)
         row_headers = [x[0] for x in cursorObject.description]
         result = cursorObject.fetchall()
         jsonData = []

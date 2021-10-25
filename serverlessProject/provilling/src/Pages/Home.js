@@ -11,6 +11,7 @@ import Products from "./Products";
 import Providers from "./Providers";
 import Bills from "./Bills";
 import NewBill from "./NewBill";
+import Account from "./Account";
 function Home() {
     let { path, url } = useRouteMatch();
     return (
@@ -28,17 +29,14 @@ function Home() {
                                 </Link>
                             </a>
                             <form class="d-flex">
-                                <input
-                                    class="form-control me-2"
-                                    type="search"
-                                    placeholder="Search"
-                                    aria-label="Search"
-                                />
-                                <button
-                                    class="btn btn-outline-success"
-                                    type="submit"
-                                >
-                                    Buscar
+                                <img alt="logo" src="../public/logo.png" />
+                                <button class="btn btn-warning" type="submit">
+                                    <Link
+                                        to={`${url}/cuenta`}
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        Cuenta
+                                    </Link>
                                 </button>
                             </form>
                         </div>
@@ -123,6 +121,9 @@ function Home() {
                             </Route>
                             <Route exact path={`${path}/nuevaFactura`}>
                                 <NewBill />
+                            </Route>
+                            <Route exact path={`${path}/cuenta`}>
+                                <Account />
                             </Route>
                         </Switch>
                     </div>
