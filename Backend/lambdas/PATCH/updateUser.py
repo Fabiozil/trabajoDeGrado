@@ -14,10 +14,10 @@ def lambda_handler(event, context):
     cursorObject = db.cursor()
     
     # creating database
-    for register in data['clients']:
+    for register in data['users']:
         try:
             print(register)
-            query = "CALL dbMain.uspCreateClient('"+register['name']+"', '"+register['clientType']+"', '"+register['document']+"', '"+register['contactName']+"', '"+register['contactEmail']+"', '"+register['phone']+"', '"+register['contactPhone']+"', '"+register['address']+"','"+register['fiscalResponsability']+"', "+str(register['userAddID'])+", '"+register['city']+"')"
+            query = "CALL dbMain.uspUpdateUser("+str(register['userID'])+", '"+register['document']+"', '"+register['city']+"', '"+register['address']+"', '"+register['email']+"', '"+register['phone']+"', '"+register['economicActivityCode']+"', '"+register['fiscalResponsability']+"', '"+register['userType']+"', '"+register['name']+"')"
             print(query)
             cursorObject.execute(query)
             db.commit()
@@ -25,13 +25,13 @@ def lambda_handler(event, context):
             db.close()
             response = {
                 'status' : 200,
-                'body' : json.dumps({'Error': 'Error al insertar registros'})
+                'body' : json.dumps({'Error': 'Error al actualizar registros'})
             }
             return response
     
     response = {
         'status' : 200,
-        'body' : json.dumps({'Estado': 'Exito, registros ingresados'})
+        'body' : json.dumps({'Estado': 'Exito, registros actualizados'})
     }
     db.close()
     return response

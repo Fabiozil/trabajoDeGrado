@@ -27,7 +27,8 @@ IN phone VARCHAR(20),
 IN contactPhone VARCHAR(20),
 IN address VARCHAR(150),
 IN fiscalResponsability VARCHAR(40),
-IN clientIDToEdit INT
+IN clientIDToEdit INT,
+IN cityE VARCHAR(60)
 )
 BEGIN
 -- 	SET @fiscalResponsabilityValue = "";
@@ -51,7 +52,8 @@ BEGIN
 			contactPhone = contactPhone,
 			address = address,
 			fiscalResponsability = fiscalResponsability,
-			updatedAt = NOW()
+			updatedAt = NOW(),
+            city = cityE
 		WHERE
             clientID = clientIDToEdit
 			;

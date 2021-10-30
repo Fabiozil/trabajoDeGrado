@@ -15,7 +15,7 @@ def lambda_handler(event, context):
     cursorObject = db.cursor()
     
     # creating database
-    cursorObject.execute("SELECT * FROM dbMain.tblBillNumerations WHERE numerationID = "+ id)
+    cursorObject.execute("SELECT initialConsecutive, finalConsecutive, currentConsecutive, status, CAST(validUntil AS CHAR(50)) AS validUntil, numerationID FROM dbMain.tblBillNumerations WHERE numerationID = "+ id)
     row_headers = [x[0] for x in cursorObject.description]
     result = cursorObject.fetchall()
     jsonData = []

@@ -3,7 +3,7 @@ var axios = require("axios");
 
 function Accounts() {
     const [registers, setRegisters] = useState([]);
-    const [userId, setUserId] = useState(1);
+    const [userID, setUserID] = useState(1);
     const [name, setName] = useState("");
     const [document, setDocument] = useState("");
     const [email, setEmail] = useState("");
@@ -41,7 +41,7 @@ function Accounts() {
                     setRf(response.data[0]["fiscalResponsability"]);
                     setUserType(response.data[0]["userType"]);
                     setEconomicalActivity(
-                        response.data[0]["economicalActivityCode"]
+                        response.data[0]["economicActivityCode"]
                     );
                     recargarTabla();
                 })
@@ -195,26 +195,49 @@ function Accounts() {
                     </div>
                     <div className="row">
                         <div className="col-sm-12 col-md-6 col-xl-4">
-                            <select
-                                className="form-select mb-3"
-                                aria-label="Default select example"
-                                onChange={(value) =>
-                                    setEconomicalActivity(value.target.value)
-                                }
-                            >
-                                <option value="0">
-                                    Codigo de Actividad Economica
-                                </option>
-                            </select>
+                            <div class="input-group mb-3">
+                                <span
+                                    class="input-group-text"
+                                    id="inputGroup-sizing-default"
+                                >
+                                    Codigo Actividad Economica
+                                </span>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    value={economicalActivity}
+                                    onInput={(text) =>
+                                        setEconomicalActivity(text.target.value)
+                                    }
+                                />
+                            </div>
                         </div>
                         <div className="col-sm-12 col-md-6 col-xl-4">
                             <select
                                 className="form-select mb-3"
                                 aria-label="Default select example"
                                 onChange={(value) => setRf(value.target.value)}
+                                value={rf}
                             >
                                 <option value="0">
                                     Responsabilidad Fiscal
+                                </option>
+                                <option value="Gran Contribuyente">
+                                    Gran Contribuyente
+                                </option>
+                                <option value="Auto Retenedor">
+                                    Auto Retenedor
+                                </option>
+                                <option value="Agente de retencion de IVA">
+                                    Agente de retencion de IVA
+                                </option>
+                                <option value="Regimen Simple de Tributacion">
+                                    Regimen Simple de Tributacion
+                                </option>
+                                <option value="No aplica - Otros">
+                                    No aplica - Otros
                                 </option>
                             </select>
                         </div>
@@ -225,8 +248,11 @@ function Accounts() {
                                 onChange={(value) =>
                                     setUserType(value.target.value)
                                 }
+                                value={userType}
                             >
                                 <option value="0">Tipo de Usuario</option>
+                                <option value="NATURAL">Natural</option>
+                                <option value="JURIDICA">Juridica</option>
                             </select>
                         </div>
                     </div>
@@ -256,7 +282,7 @@ function Accounts() {
                             type="text"
                             class="form-control"
                             id="inputClientID"
-                            placeholder="ID Producto"
+                            placeholder="ID Consecutivos"
                             value={numerationID}
                             onInput={(text) =>
                                 setNumerationID(text.target.value)
@@ -364,6 +390,7 @@ function Accounts() {
                                 onChange={(value) =>
                                     setNumerationStatus(value.target.value)
                                 }
+                                value={numerationStatus}
                             >
                                 <option value="0">
                                     Estado de la enumeracion
@@ -425,14 +452,16 @@ function Accounts() {
                             <td></td>
                         </tr>
                     ) : (
-                        registers.map((enumeration) => (
+                        registers.map((numeration) => (
                             <tr>
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <th scope="row">{numeration.numerationID}</th>
+                                <td>{numeration.initialConsecutive}</td>
+                                <td>{numeration.finalConsecutive}</td>
+                                <td>{numeration.currentConsecutive}</td>
+                                <td>
+                                    {numeration["CAST(validUntil AS CHAR(50))"]}
+                                </td>
+                                <td>{numeration.status}</td>
                             </tr>
                         ))
                     )}
@@ -486,7 +515,7 @@ function Accounts() {
         var config = {
             method: "get",
             url:
-                "http://localhost:3000/dev/getProduct?productID=" +
+                "http://localhost:3000/dev/getNumeration?numerationID=" +
                 numerationID,
             headers: {},
         };
@@ -497,15 +526,27 @@ function Accounts() {
                 } else {
                     if (response.data.length === 0) {
                         alert(
-                            "No se encontró producto asociado al ID ingresado"
+                            "No se encontró consecutivo asociado al ID ingresado"
                         );
-                        setName("");
-                        setIdToEdit("");
+                        setInitialConsecutive(0);
+                        setFinalConsecutive(0);
+                        setCurrentConsecutive(0);
+                        setValidUntil(new Date());
+                        setNumerationStatus(0);
                         setCreateStatus(true);
                     } else {
-                        alert("Producto encontrado");
-                        setName(response.data[0]["name"]);
-                        setIdToEdit(response.data[0]["productID"]);
+                        alert("Se encontró Consecutivo");
+                        setInitialConsecutive(
+                            response.data[0]["initialConsecutive"]
+                        );
+                        setFinalConsecutive(
+                            response.data[0]["finalConsecutive"]
+                        );
+                        setCurrentConsecutive(
+                            response.data[0]["currentConsecutive"]
+                        );
+                        setValidUntil(response.data[0]["validUntil"]);
+                        setNumerationStatus(response.data[0]["status"]);
                         setCreateStatus(false);
                     }
                 }
@@ -517,25 +558,33 @@ function Accounts() {
     }
 
     function changeToCreate() {
-        setName("");
-        setIdToEdit("");
+        setInitialConsecutive(0);
+        setFinalConsecutive(0);
+        setCurrentConsecutive(0);
+        setValidUntil(new Date());
+        setNumerationStatus(0);
         setCreateStatus(true);
     }
 
     function editNumeration() {
         var axios = require("axios");
         var data = JSON.stringify({
-            products: [
+            numerations: [
                 {
-                    name: name,
-                    productID: idToEdit,
+                    numerationID: numerationID,
+                    status: numerationStatus,
+                    currentConsecutive: currentConsecutive,
+                    initialConsecutive: initialConsecutive,
+                    finalConsecutive: finalConsecutive,
+                    validUntil: validUntil,
+                    consecutiveAutorization: "",
                 },
             ],
         });
 
         var config = {
             method: "patch",
-            url: "http://localhost:3000/dev/updateProduct",
+            url: "http://localhost:3000/dev/updateNumeration",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -573,7 +622,48 @@ function Accounts() {
                 console.log(error);
             });
     }
-    function editUser() {}
+    function editUser() {
+        var axios = require("axios");
+        var data = JSON.stringify({
+            users: [
+                {
+                    userID: userID,
+                    document: document,
+                    city: city,
+                    address: address,
+                    email: email,
+                    phone: phone,
+                    economicActivityCode: economicalActivity,
+                    fiscalResponsability: rf,
+                    userType: userType,
+                    name: name,
+                },
+            ],
+        });
+
+        var config = {
+            method: "patch",
+            url: "http://localhost:3000/dev/updateUser",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                if (response.status === 400) {
+                    alert("Error en el servidor, contacte con soporte");
+                } else {
+                    alert("Usuario editado satisfactoriamente");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert("Error en el servidor, contacte con soporte");
+            });
+    }
 }
 
 export default Accounts;

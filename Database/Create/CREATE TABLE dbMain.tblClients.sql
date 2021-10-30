@@ -6,6 +6,7 @@ Fecha:
 Descripción:
 	Creación de tabla de clientes
 ----------------------------------------------------------------------------------------
+SELECT * FROM dbMain.tblClients;
 */
 DROP TABLE IF EXISTS dbMain.tblClients;
 CREATE TABLE 
@@ -20,6 +21,7 @@ CREATE TABLE
     contactEmail VARCHAR(150),
     phone VARCHAR(20),
     contactPhone VARCHAR(20),
+    city VARCHAR(60),
     address VARCHAR(150),
     fiscalResponsability VARCHAR(30),
     updatedAt DATETIME,

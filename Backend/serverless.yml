@@ -138,11 +138,25 @@ functions:
                   path: getProvider
                   method: GET
                   cors: true
+    getNumerationStatus:
+        handler: lambdas/GET/getNumerationStatus.lambda_handler
+        events:
+            - http:
+                  path: getNumerationStatus
+                  method: GET
+                  cors: true
     createClient:
         handler: lambdas/POST/createClient.lambda_handler
         events:
             - http:
                   path: createClient
+                  method: POST
+                  cors: true
+    createBill:
+        handler: lambdas/POST/createBill.lambda_handler
+        events:
+            - http:
+                  path: createBill
                   method: POST
                   cors: true
     createProduct:
@@ -192,6 +206,20 @@ functions:
         events:
             - http:
                   path: updateClient
+                  method: PATCH
+                  cors: true
+    updateUser:
+        handler: lambdas/PATCH/updateUser.lambda_handler
+        events:
+            - http:
+                  path: updateUser
+                  method: PATCH
+                  cors: true
+    updateNumeration:
+        handler: lambdas/PATCH/updateNumeration.lambda_handler
+        events:
+            - http:
+                  path: updateNumeration
                   method: PATCH
                   cors: true
     updateProduct:

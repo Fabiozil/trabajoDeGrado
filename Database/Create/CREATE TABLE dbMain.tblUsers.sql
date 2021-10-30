@@ -18,7 +18,7 @@ CREATE TABLE
 	address VARCHAR(100),
     contactEmail VARCHAR(150)NOT NULL,
     phone VARCHAR(20),
-    economicActivityCode INT NOT NULL,
+    economicActivityCode varchar(30) NOT NULL,
     fiscalResponsability VARCHAR(30) NOT NULL,
     userType VARCHAR(10) NOT NULL,
     name VARCHAR(150) NOT NULL,

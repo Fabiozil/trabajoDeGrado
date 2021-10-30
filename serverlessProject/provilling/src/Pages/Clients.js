@@ -15,6 +15,7 @@ function Clients() {
     const [contactPhone, setContactPhone] = useState("");
     const [idToEdit, setIdToEdit] = useState(0);
     const [createStatus, setCreateStatus] = useState(true);
+    const [city, setCity] = useState("");
     var config = {
         method: "get",
         url: "http://localhost:3000/dev/getClients?userID=1",
@@ -254,6 +255,29 @@ function Clients() {
                         </div>
                     </div>
                     <div className="row">
+                        <div className="col-sm-12 col-md-6 col-xl-4">
+                            <div class="input-group mb-3">
+                                <span
+                                    class="input-group-text"
+                                    id="inputGroup-sizing-default"
+                                >
+                                    Ciudad
+                                </span>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    value={city}
+                                    onInput={(text) =>
+                                        setCity(text.target.value)
+                                    }
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row">
                         <div className="col">
                             <button
                                 class="btn btn-primary "
@@ -303,6 +327,7 @@ function Clients() {
                         <th scope="col">Email</th>
                         <th scope="col">Tel Contacto</th>
                         <th scope="col">Dirección</th>
+                        <th scope="col">Ciudad</th>
                         <th scope="col">Resp Fiscal</th>
                     </tr>
                 </thead>
@@ -310,6 +335,13 @@ function Clients() {
                     {registers.length === 0 ? (
                         <tr>
                             <td>No existen clientes registrados</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -326,6 +358,7 @@ function Clients() {
                                 <td>{client.contactEmail}</td>
                                 <td>{client.contactPhone}</td>
                                 <td>{client.address}</td>
+                                <td>{client.city}</td>
                                 <td>{client.fiscalResponsability}</td>
                             </tr>
                         ))
@@ -349,6 +382,7 @@ function Clients() {
                     address: address,
                     fiscalResponsability: rf,
                     userAddID: 1,
+                    city: city,
                 },
             ],
         });
@@ -404,6 +438,7 @@ function Clients() {
                         setAddress("");
                         setDocument("");
                         setIdToEdit("");
+                        setCity("");
                         setCreateStatus(true);
                     } else {
                         alert("Cliente encontrado");
@@ -417,6 +452,7 @@ function Clients() {
                         setAddress(response.data[0]["address"]);
                         setDocument(response.data[0]["document"]);
                         setIdToEdit(response.data[0]["clientID"]);
+                        setCity(response.data[0]["city"]);
                         setCreateStatus(false);
                     }
                 }
@@ -456,6 +492,7 @@ function Clients() {
                     address: address,
                     fiscalResponsability: rf,
                     clientID: idToEdit,
+                    city: city,
                 },
             ],
         });

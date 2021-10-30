@@ -26,7 +26,8 @@ IN phone VARCHAR(20),
 IN contactPhone VARCHAR(20),
 IN address VARCHAR(150),
 IN fiscalResponsability VARCHAR(40),
-IN userAddID INT
+IN userAddID INT,
+IN city VARCHAR(60)
 )
 BEGIN
 -- 	SET @fiscalResponsabilityValue = "";
@@ -51,7 +52,8 @@ BEGIN
 			address,
 			fiscalResponsability,
 			userID,
-			createdAt
+			createdAt,
+            city
 			)
 		VALUES
 			(
@@ -65,7 +67,8 @@ BEGIN
 			address,
 			fiscalResponsability,
 			userAddID,
-			NOW()
+			NOW(),
+            city
 			);
 	COMMIT;
 END &&

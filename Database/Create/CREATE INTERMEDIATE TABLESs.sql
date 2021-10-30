@@ -29,7 +29,8 @@ CREATE TABLE
     productID INT UNSIGNED NOT NULL,
     quantity INT UNSIGNED NOT NULL,
     value FLOAT NOT NULL,
-    taxes FLOAT NOT NULL,
+    consumptionTax FLOAT NOT NULL,
+    IVA FLOAT NOT NULL,
     totalValue FLOAT NOT NULL,
     createdAt DATETIME NOT NULL
     );

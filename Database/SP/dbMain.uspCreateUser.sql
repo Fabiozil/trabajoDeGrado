@@ -14,32 +14,22 @@ SELECT * FROM dbMain.tblbillenum
 DROP PROCEDURE IF EXISTS dbMain.uspCreateUser;
 DELIMITER &&
 CREATE PROCEDURE dbMain.uspCreateUser(
-IN numerationID INT UNSIGNED,
 IN document VARCHAR(20),
 IN city VARCHAR(50),
 IN address VARCHAR(100),
 IN contactEmail VARCHAR(150),
 IN phone VARCHAR(20),
-IN economicActivityCode INT,
-IN fiscalResponsability INT,
+IN economicActivityCode VARCHAR(50),
+IN fiscalResponsability VARCHAR(50),
 IN userType VARCHAR(10),
 IN name VARCHAR(150)
 )
 BEGIN
-	SET @fiscalResponsabilityValue = "";
-	CASE 
-		WHEN fiscalResponsability = 1 THEN SET @fiscalResponsabilityValue = "Gran Contribuyente";
-        WHEN fiscalResponsability = 2 THEN SET @fiscalResponsabilityValue = "Auto Retenedor";
-        WHEN fiscalResponsability = 3 THEN SET @fiscalResponsabilityValue = "Agente de retencion de IVA";
-        WHEN fiscalResponsability = 4 THEN SET @fiscalResponsabilityValue = "Regimen Simple de Tributacion";
-        ELSE SET @fiscalResponsabilityValue = "No aplica - Otros";
-	END CASE; 
     
 	START TRANSACTION;
 		INSERT INTO
 			dbMain.tblUsers
 			(
-			numerationID,
 			document,
 			city,
 			address,
@@ -53,14 +43,13 @@ BEGIN
             )
             VALUES
             (
-			numerationID,
 			document,
 			city,
 			address,
 			contactEmail,
 			phone,
 			economicActivityCode,
-			@fiscalResponsabilityValue,
+			fiscalResponsabilityValue,
 			userType,
 			name,
             NOW()

@@ -9,8 +9,10 @@ Ejemplo de ejecución:
 	CALL dbMain.uspCreateNumeration('ACTIVO', 1, 1, 100, '20221231', "", 1)
 ----------------------------------------------------------------------------------------
 SELECT * FROM dbMain.tblUsers;
-SELECT str() FROM dbMain.tblbillnumerations;
+SELECT * FROM dbMain.tblbillnumerations;
+
 */
+SELECT COUNT(0) AS Count FROM dbmain.tblbillnumerations WHERE userAddID = 1 AND status = 'ACTIVO';
 DROP PROCEDURE IF EXISTS dbMain.uspCreateNumeration;
 DELIMITER &&
 CREATE PROCEDURE dbMain.uspCreateNumeration(

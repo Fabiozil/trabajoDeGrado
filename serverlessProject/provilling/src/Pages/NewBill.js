@@ -5,6 +5,7 @@ function NewBill() {
     const [registers, setRegisters] = useState([]);
     const [billId, setBillId] = useState("");
     const [productCount, setProductCount] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("");
     const [total, setTotal] = useState(0);
     const [totalIVA, setTotalIVA] = useState(0);
     const [totalValue, setTotalValue] = useState(0);
@@ -21,6 +22,8 @@ function NewBill() {
     const [productID, setProductID] = useState(0);
     const [productRegister, setProductRegister] = useState([]);
     const [productsOnBill, setProductsOnBill] = useState([]);
+    const [numerationStatus, setNumerationStatus] = useState(false);
+    const [userID, setUserID] = useState(1);
 
     var config = {
         method: "get",
@@ -41,6 +44,7 @@ function NewBill() {
                 }),
         []
     );
+
     var configProducts = {
         method: "get",
         url: "http://localhost:3000/dev/getProducts?userID=1",
@@ -59,6 +63,30 @@ function NewBill() {
         []
     );
 
+    var configNumerations = {
+        method: "get",
+        url: "http://localhost:3000/dev/getNumerationStatus?userID=1",
+        headers: {},
+    };
+    React.useEffect(
+        () =>
+            axios(configNumerations)
+                .then(function (response) {
+                    console.log(JSON.stringify(response.data));
+                    if (response.data[0]["Count"] == 1) {
+                        setNumerationStatus(true);
+                    } else {
+                        alert(
+                            "Verifique por favor los consecutivos activos, debe de ser solo uno. Hasta que no corrija no podrá generar facturas"
+                        );
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }),
+        []
+    );
+
     return (
         <div className="col-12">
             <h1> Nueva Factura </h1>
@@ -69,7 +97,7 @@ function NewBill() {
                     finalizar para crear una nueva factura
                 </small>
                 <div className="row mt-3">
-                    <div className="col-sm-12 col-md-6 col-xl-6">
+                    <div className="col-sm-12 col-md-4 col-xl-4">
                         <select
                             className="form-select mb-3"
                             aria-label="Default select example"
@@ -85,7 +113,7 @@ function NewBill() {
                             ))}
                         </select>
                     </div>
-                    <div className="col-sm-12 col-md-6 col-xl-6">
+                    <div className="col-sm-12 col-md-4 col-xl-4">
                         <div class="input-group mb-3">
                             <span
                                 class="input-group-text"
@@ -102,6 +130,21 @@ function NewBill() {
                                 onInput={(text) => setDate(text.target.value)}
                             />
                         </div>
+                    </div>
+                    <div className="col-sm-12 col-md-4 col-xl-4">
+                        <select
+                            className="form-select mb-3"
+                            aria-label="Default select example"
+                            onChange={(value) =>
+                                setPaymentMethod(value.target.value)
+                            }
+                        >
+                            <option value="0">Metodo de pago</option>
+                            <option value="Transferencia">Transferencia</option>
+                            <option value="Credito">Credito</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Efectivo">Efectivo</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -288,6 +331,7 @@ function NewBill() {
                         type="submit"
                         class="btn btn-success mb-3"
                         onClick={generateBill}
+                        disabled={!numerationStatus}
                     >
                         Generar Factura
                     </button>
@@ -377,7 +421,57 @@ function NewBill() {
         });
         setProductCount(productsOnBill.length);
     }
-    function generateBill() {}
+
+    function generateBill() {
+        var axios = require("axios");
+        var data = JSON.stringify({
+            clients: [
+                {
+                    name: name,
+                    clientType: clientType,
+                    document: document,
+                    contactName: contactName,
+                    contactEmail: contactEmail,
+                    phone: phone,
+                    contactPhone: contactPhone,
+                    address: address,
+                    fiscalResponsability: rf,
+                    userAddID: 1,
+                    city: city,
+                },
+            ],
+            bill: {
+                clientID: clientID,
+                userID: userID,
+            },
+        });
+
+        console.log(data);
+
+        var config = {
+            method: "post",
+            url: "http://localhost:3000/dev/createClient",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                if (response.status === 400) {
+                    alert("Error en el servidor, contacte con soporte");
+                } else {
+                    alert("Registro creado satisfactoriamente");
+                    recargarTabla();
+                }
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                alert("Error al crear el registro, contacte con soporte");
+                console.log(error);
+            });
+    }
 }
 
 export default NewBill;
