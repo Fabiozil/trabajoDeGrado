@@ -9,7 +9,7 @@ Ejemplo de ejecución:
 	CALL dbMain.uspUpdateUser(1, "1152716365", "Rionegro", "Calle 67 #54 365", "fabioanayac@outlook.com", "3015267553", 2, "Auto Retenedor", "NATURAL", "Fabio Enrique Anaya Castillo")
 ----------------------------------------------------------------------------------------
 SELECT * FROM dbMain.tblUsers;
-SELECT * FROM dbMain.tblbillenumerations
+SELECT * FROM dbMain.tblbillnumerations;
 */
 DROP PROCEDURE IF EXISTS dbMain.uspUpdateUser;
 DELIMITER &&

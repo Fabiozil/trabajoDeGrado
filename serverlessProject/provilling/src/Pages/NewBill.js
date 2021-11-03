@@ -1,15 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 var axios = require("axios");
 
 function NewBill() {
-    const [registers, setRegisters] = useState([]);
-    const [billId, setBillId] = useState("");
-    const [productCount, setProductCount] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("");
-    const [total, setTotal] = useState(0);
-    const [totalIVA, setTotalIVA] = useState(0);
-    const [totalValue, setTotalValue] = useState(0);
-    const [totalConsumption, setTotalConsumption] = useState(0);
     const [clientID, setClientID] = useState(0);
     const [clientRegisters, setClientRegisters] = useState([]);
     const [productRegisters, setProductRegisters] = useState([]);
@@ -18,9 +11,7 @@ function NewBill() {
     const [discount, setDiscount] = useState(0);
     const [iva, setIVA] = useState(0);
     const [consumption, setConsumption] = useState(0);
-    const [totalDiscount, setTotalDiscount] = useState(0);
     const [productID, setProductID] = useState(0);
-    const [productRegister, setProductRegister] = useState([]);
     const [productsOnBill, setProductsOnBill] = useState([]);
     const [numerationStatus, setNumerationStatus] = useState(false);
     const [userID, setUserID] = useState(1);
@@ -31,12 +22,10 @@ function NewBill() {
         headers: {},
     };
 
-    console.log(productsOnBill);
     React.useEffect(
         () =>
             axios(config)
                 .then(function (response) {
-                    console.log(JSON.stringify(response.data));
                     setClientRegisters(response.data);
                 })
                 .catch(function (error) {
@@ -54,7 +43,6 @@ function NewBill() {
         () =>
             axios(configProducts)
                 .then(function (response) {
-                    console.log(JSON.stringify(response.data));
                     setProductRegisters(response.data);
                 })
                 .catch(function (error) {
@@ -68,11 +56,11 @@ function NewBill() {
         url: "http://localhost:3000/dev/getNumerationStatus?userID=1",
         headers: {},
     };
+
     React.useEffect(
         () =>
             axios(configNumerations)
                 .then(function (response) {
-                    console.log(JSON.stringify(response.data));
                     if (response.data[0]["Count"] == 1) {
                         setNumerationStatus(true);
                     } else {
@@ -87,11 +75,155 @@ function NewBill() {
         []
     );
 
+    function addProduct() {
+        var axios = require("axios");
+        var config = {
+            method: "get",
+            url: "http://localhost:3000/dev/getProduct?productID=" + productID,
+            headers: {},
+        };
+        axios(config)
+            .then(function (response) {
+                if (
+                    response.data[0]["stock"] <
+                    parseInt(quantity) + countOnBill(productID)
+                ) {
+                    alert(
+                        "Cantidad ingresada invalida, no hay suficiente stock del producto"
+                    );
+                    return;
+                } else {
+                    var nuevoProducto = {
+                        id: response.data[0]["productID"],
+                        code: response.data[0]["code"],
+                        name: response.data[0]["name"],
+                        value: response.data[0]["value"],
+                        quantity: quantity,
+                        netValue: quantity * response.data[0]["value"],
+                        discount:
+                            quantity *
+                            response.data[0]["value"] *
+                            (discount / 100),
+                        iva: quantity * response.data[0]["value"] * (iva / 100),
+                        consumption:
+                            quantity *
+                            response.data[0]["value"] *
+                            (consumption / 100),
+                        totalValue:
+                            quantity * response.data[0]["value"] +
+                            quantity * response.data[0]["value"] * (iva / 100) +
+                            quantity *
+                                response.data[0]["value"] *
+                                (consumption / 100) -
+                            quantity *
+                                response.data[0]["value"] *
+                                (discount / 100),
+                    };
+                    setProductsOnBill((prevValue) => [
+                        ...prevValue,
+                        nuevoProducto,
+                    ]);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    function countOnBill(IDToSearch) {
+        var count = 0;
+        productsOnBill.forEach((product) => {
+            if (product.id === IDToSearch) {
+                count += parseInt(product.quantity);
+            }
+        });
+        return count;
+    }
+
+    function generateBill() {
+        var axios = require("axios");
+        var data = JSON.stringify({
+            products: productsOnBill,
+            bill: {
+                clientID: clientID,
+                userID: userID,
+                total: total,
+                totalDiscount: totalDiscount,
+                totalIVA: totalIVA,
+                totalConsumption: totalConsumption,
+                totalValue: totalValue,
+                generationDate: date,
+                paymentMethod: paymentMethod,
+            },
+        });
+
+        console.log(data);
+
+        var config = {
+            method: "post",
+            url: "http://localhost:3000/dev/createBill",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                if (response.status === 400) {
+                    alert("Error en el servidor, contacte con soporte");
+                } else {
+                    alert("Factura creada satisfactoriamente");
+                }
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                alert("Error al crear el registro, contacte con soporte");
+                console.log(error);
+            });
+    }
+
+    const total = React.useMemo(() => {
+        let total = 0;
+        productsOnBill.forEach((product) => {
+            total = total + product.netValue;
+        });
+        return total;
+    }, [productsOnBill]);
+    const totalIVA = React.useMemo(() => {
+        let total = 0;
+        productsOnBill.forEach((product) => {
+            total = total + product.iva;
+        });
+        return total;
+    }, [productsOnBill]);
+    const totalConsumption = React.useMemo(() => {
+        let total = 0;
+        productsOnBill.forEach((product) => {
+            total = total + product.consumption;
+        });
+        return total;
+    }, [productsOnBill]);
+    const totalValue = React.useMemo(() => {
+        let total = 0;
+        productsOnBill.forEach((product) => {
+            total = total + product.totalValue;
+        });
+        return total;
+    }, [productsOnBill]);
+    const totalDiscount = React.useMemo(() => {
+        let total = 0;
+        productsOnBill.forEach((product) => {
+            total = total + product.discount;
+        });
+        return total;
+    }, [productsOnBill]);
+
     return (
         <div className="col-12">
             <h1> Nueva Factura </h1>
             <div className="border-solid border shadow p-3">
-                <h4 className="mb-0">Crear Nueva Factura</h4>
+                <h4 className="mb-0">Información del Cliente</h4>
                 <small className="text-muted mt-0 pt-0 sub-sup-font-size">
                     Agregue los datos de la factura y presione crear al
                     finalizar para crear una nueva factura
@@ -339,139 +471,6 @@ function NewBill() {
             </div>
         </div>
     );
-    function addProduct() {
-        var axios = require("axios");
-        var config = {
-            method: "get",
-            url: "http://localhost:3000/dev/getProduct?productID=" + productID,
-            headers: {},
-        };
-        axios(config)
-            .then(function (response) {
-                setProductRegister(response.data);
-                console.log(parseInt(quantity) + countOnBill(productID));
-                if (
-                    response.data[0]["stock"] <
-                    parseInt(quantity) + countOnBill(productID)
-                ) {
-                    alert(
-                        "Cantidad ingresada invalida, no hay suficiente stock del producto"
-                    );
-                    return;
-                } else {
-                    var nuevoProducto = {
-                        id: response.data[0]["productID"],
-                        code: response.data[0]["code"],
-                        name: response.data[0]["name"],
-                        value: response.data[0]["value"],
-                        quantity: quantity,
-                        netValue: quantity * response.data[0]["value"],
-                        discount:
-                            quantity *
-                            response.data[0]["value"] *
-                            (discount / 100),
-                        iva: quantity * response.data[0]["value"] * (iva / 100),
-                        consumption:
-                            quantity *
-                            response.data[0]["value"] *
-                            (consumption / 100),
-                        totalValue:
-                            quantity * response.data[0]["value"] +
-                            quantity * response.data[0]["value"] * (iva / 100) +
-                            quantity *
-                                response.data[0]["value"] *
-                                (consumption / 100) -
-                            quantity *
-                                response.data[0]["value"] *
-                                (discount / 100),
-                    };
-                    setProductsOnBill((prevValue) => [
-                        ...prevValue,
-                        nuevoProducto,
-                    ]);
-                    calculateNewTotal();
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
-
-    function countOnBill(IDToSearch) {
-        var count = 0;
-        productsOnBill.forEach((product) => {
-            if (product.id === IDToSearch) {
-                count += parseInt(product.quantity);
-            }
-        });
-        return count;
-    }
-
-    function calculateNewTotal() {
-        setTotal(0);
-        setTotalDiscount(0);
-        setTotalIVA(0);
-        setTotalConsumption(0);
-        productsOnBill.forEach((product) => {
-            setTotal(total + product.netValue);
-            setTotalDiscount(totalDiscount + product.discount);
-            setTotalIVA(totalIVA + product.iva);
-            setTotalConsumption(totalConsumption + product.consumption);
-            setTotalValue(totalValue + product.totalValue);
-        });
-        setProductCount(productsOnBill.length);
-    }
-
-    function generateBill() {
-        var axios = require("axios");
-        var data = JSON.stringify({
-            clients: [
-                {
-                    name: name,
-                    clientType: clientType,
-                    document: document,
-                    contactName: contactName,
-                    contactEmail: contactEmail,
-                    phone: phone,
-                    contactPhone: contactPhone,
-                    address: address,
-                    fiscalResponsability: rf,
-                    userAddID: 1,
-                    city: city,
-                },
-            ],
-            bill: {
-                clientID: clientID,
-                userID: userID,
-            },
-        });
-
-        console.log(data);
-
-        var config = {
-            method: "post",
-            url: "http://localhost:3000/dev/createClient",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            data: data,
-        };
-
-        axios(config)
-            .then(function (response) {
-                if (response.status === 400) {
-                    alert("Error en el servidor, contacte con soporte");
-                } else {
-                    alert("Registro creado satisfactoriamente");
-                    recargarTabla();
-                }
-                console.log(JSON.stringify(response.data));
-            })
-            .catch(function (error) {
-                alert("Error al crear el registro, contacte con soporte");
-                console.log(error);
-            });
-    }
 }
 
 export default NewBill;

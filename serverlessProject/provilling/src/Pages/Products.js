@@ -118,7 +118,6 @@ function Products() {
                                     onInput={(text) =>
                                         setStock(text.target.value)
                                     }
-                                    disabled={!createStatus}
                                 />
                             </div>
                         </div>
@@ -345,6 +344,7 @@ function Products() {
                     value: value,
                     description: description,
                     productID: idToEdit,
+                    stock: Stock,
                 },
             ],
         });

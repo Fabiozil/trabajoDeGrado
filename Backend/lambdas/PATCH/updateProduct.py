@@ -17,7 +17,7 @@ def lambda_handler(event, context):
     for register in data['products']:
         try:
             print(register)
-            query = "CALL dbMain.uspUpdateProduct('"+register['name']+"', '"+register['code']+"', "+str(register['value'])+", '"+register['description']+"', "+str(register['productID'])+")"
+            query = "CALL dbMain.uspUpdateProduct('"+register['name']+"', '"+register['code']+"', "+str(register['value'])+", '"+register['description']+"', "+str(register['productID'])+", "+str(register['stock'])+")"
             print(query)
             cursorObject.execute(query)
             db.commit()

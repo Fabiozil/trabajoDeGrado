@@ -18,12 +18,13 @@ IN nameE VARCHAR(150),
 IN codeE VARCHAR(50), 
 IN valueE FLOAT,
 IN descriptionE VARCHAR(200),
-IN productIDE INT
+IN productIDE INT,
+IN stockE INT
 )
 BEGIN
-	SET @stock = (SELECT stock FROM dbMain.tblProducts WHERE productID = productIDE);
-    SELECT @stock;
-	SET @stockValue = @stock * valueE;
+	#SET @stock = (SELECT stock FROM dbMain.tblProducts WHERE productID = productIDE);
+    #SELECT @stock;
+	SET @stockValue = stockE * valueE;
     START TRANSACTION;
 		UPDATE
 			dbMain.tblProducts
@@ -33,7 +34,8 @@ BEGIN
             value = valueE,
             description = descriptionE,
             stockValue = @stockValue,
-            updatedAt = NOW()
+            updatedAt = NOW(),
+            stock = stockE
 		WHERE
 			productID = productIDE;
 	COMMIT;

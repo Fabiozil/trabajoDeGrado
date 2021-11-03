@@ -124,6 +124,13 @@ functions:
                   path: getProviders
                   method: GET
                   cors: true
+    getBill:
+        handler: lambdas/GET/getBill.lambda_handler
+        events:
+            - http:
+                  path: getBill
+                  method: GET
+                  cors: true
     getBills:
         handler: lambdas/GET/getBills.lambda_handler
         events:

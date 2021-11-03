@@ -12,25 +12,32 @@ import Providers from "./Providers";
 import Bills from "./Bills";
 import NewBill from "./NewBill";
 import Account from "./Account";
+import Init from "./Init";
 function Home() {
     let { path, url } = useRouteMatch();
     return (
         <Router>
-            <div className="row">
-                <div className="col-12">
-                    <nav class="navbar navbar-light bg-light">
+            <div className="row" style={{ minHeight: "5vh" }}>
+                <div className="col-12 h-100">
+                    <nav class="navbar navbar-light bg-light h-100">
                         <div class="container-fluid">
                             <a class="navbar-brand">
                                 <Link
                                     to={`${url}`}
                                     style={{ textDecoration: "none" }}
                                 >
-                                    Inicio
+                                    <img
+                                        alt="logo"
+                                        src="./logo.png"
+                                        style={{ maxHeight: "4vh" }}
+                                    />
                                 </Link>
                             </a>
                             <form class="d-flex">
-                                <img alt="logo" src="../public/logo.png" />
-                                <button class="btn btn-warning" type="submit">
+                                <button
+                                    class="btn btn-outline-primary ml-3"
+                                    type="submit"
+                                >
                                     <Link
                                         to={`${url}/cuenta`}
                                         style={{ textDecoration: "none" }}
@@ -43,7 +50,7 @@ function Home() {
                     </nav>
                 </div>
             </div>
-            <div className="row">
+            <div className="row w-100" style={{ minHeight: "85vh" }}>
                 <div className="col-1">
                     <ul class="nav flex-column bg-light h-100">
                         <li class="nav-item border border-solid">
@@ -105,7 +112,7 @@ function Home() {
                     <div className="p-3">
                         <Switch>
                             <Route exact path={path}>
-                                <h1>Bienvenido</h1>
+                                <Init />
                             </Route>
                             <Route exact path={`${path}/products`}>
                                 <Products />
@@ -127,6 +134,18 @@ function Home() {
                             </Route>
                         </Switch>
                     </div>
+                </div>
+            </div>
+            <div
+                className="row bg-light w-100 p-2"
+                style={{ minHeight: "5vh" }}
+            >
+                <div className="col-12 d-flex justify-content-between">
+                    <h5 className="text-muted">v1.0.0</h5>
+                    <h5 className="text-muted">
+                        © Laboratorio Clinico Bacteriologico Provilab SAS 2021
+                    </h5>
+                    <h5 className="text-muted"></h5>
                 </div>
             </div>
         </Router>

@@ -23,6 +23,7 @@ CREATE TABLE
     contactPhone VARCHAR(20),
     city VARCHAR(60),
     address VARCHAR(150),
+    city varchar(150),
     fiscalResponsability VARCHAR(30),
     updatedAt DATETIME,
     createdAt DATETIME NOT NULL
